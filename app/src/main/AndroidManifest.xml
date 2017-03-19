@@ -23,7 +23,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".LoginActivity"
+            android:name=".LoginFragment"
             android:label="@string/title_activity_login">
         </activity>
     </application>
