@@ -16,6 +16,20 @@ public class Login {
     private String mServerHost;
     private String mServerPort;
 
+    public boolean isLoginReady() {
+        if(mUsername != null && mPassword != null && mServerHost != null && mServerPort != null) {
+            return true;
+        }
+        return false;
+    }
+
+    public boolean isRegisterReady() {
+        if(mUsername != null && mPassword != null && mServerHost != null && mServerPort != null && mFirstName != null && mLastName != null && mEmail != null) {
+            return true;
+        }
+        return false;
+    }
+
     public String getUsername() {
         return mUsername;
     }

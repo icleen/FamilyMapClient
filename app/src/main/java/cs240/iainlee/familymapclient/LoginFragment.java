@@ -35,6 +35,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         mLogin = new Login();
+        mSignIn.setActivated(false);
+		mRegister.setActivated(false);
     }
 
     @Override
@@ -51,6 +53,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mLogin.setUsername(s.toString());
                 Log.d("username", "added the username: " + mLogin.getUsername());
+				changeAccessibility();
             }
 
             @Override
@@ -68,6 +71,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mLogin.setPassword(s.toString());
                 Log.d("password", "added the password: " + mLogin.getPassword());
+				changeAccessibility();
             }
 
             @Override
@@ -84,6 +88,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mLogin.setFirstName(s.toString());
+				changeAccessibility();
             }
 
             @Override
@@ -100,6 +105,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mLogin.setLastName(s.toString());
+				changeAccessibility();
             }
 
             @Override
@@ -117,6 +123,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mLogin.setEmail(s.toString());
                 Log.d("email", "added the email: " + mLogin.getEmail());
+				changeAccessibility();
             }
 
             @Override
@@ -134,6 +141,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mLogin.setServerHost(s.toString());
                 Log.d("server_host", "added the server host number " + mLogin.getServerHost());
+				changeAccessibility();
             }
 
             @Override
@@ -151,6 +159,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 mLogin.setServerPort(s.toString());
                 Log.d("server_port", "added the server port number " + mLogin.getServerPort());
+				changeAccessibility();
             }
 
             @Override
@@ -173,6 +182,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 mLogin.setMale(!isChecked);
                 Log.d("gender", "isMale: " + mLogin.isMale());
+				changeAccessibility();
             }
         });
 
@@ -195,6 +205,12 @@ public class LoginFragment extends android.support.v4.app.Fragment {
         return v;
     }
 
-
+	private void changeAccessibility() {
+		if(mLogin.isLoginReady()) {
+			mSignIn.setActivated(true);
+		}if(mLogin.isRegisterReady()) {
+			mRegister.setActivated(true);
+		}
+	}
 
 }
