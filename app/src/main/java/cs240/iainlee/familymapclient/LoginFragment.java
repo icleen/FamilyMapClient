@@ -37,8 +37,6 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mLogin = new Login();
-//		mSignIn.setActivated(false);
-//		mRegister.setActivated(false);
 	}
 
 	@Override
@@ -54,7 +52,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				mLogin.setUsername(s.toString());
-				Log.d("username", "added the username: " + mLogin.getUsername());
+//				Log.d("username", "added the username: " + mLogin.getUsername());
 				changeAccessibility();
 			}
 
@@ -72,7 +70,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				mLogin.setPassword(s.toString());
-				Log.d("password", "added the password: " + mLogin.getPassword());
+//				Log.d("password", "added the password: " + mLogin.getPassword());
 				changeAccessibility();
 			}
 
@@ -124,7 +122,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				mLogin.setEmail(s.toString());
-				Log.d("email", "added the email: " + mLogin.getEmail());
+//				Log.d("email", "added the email: " + mLogin.getEmail());
 				changeAccessibility();
 			}
 
@@ -142,7 +140,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				mLogin.setServerHost(s.toString());
-				Log.d("server_host", "added the server host number " + mLogin.getServerHost());
+//				Log.d("server_host", "added the server host number " + mLogin.getServerHost());
 				changeAccessibility();
 			}
 
@@ -160,7 +158,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
 				mLogin.setServerPort(s.toString());
-				Log.d("server_port", "added the server port number " + mLogin.getServerPort());
+//				Log.d("server_port", "added the server port number " + mLogin.getServerPort());
 				changeAccessibility();
 			}
 
@@ -172,20 +170,20 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 		mRadioGroup = (RadioGroup) v.findViewById(R.id.radio_group);
 
 		mMale = (RadioButton) v.findViewById(R.id.male_radio);
-		mMale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				mLogin.setGender("m");
-				Log.d("gender", "gender: " + mLogin.getGender());
-				changeAccessibility();
-			}
-		});
 
 		mFemale = (RadioButton) v.findViewById(R.id.female_radio);
-		mFemale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+		mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 			@Override
-			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				mLogin.setGender("f");
+			public void onCheckedChanged(RadioGroup group, int checkedId) {
+				switch(checkedId) {
+					case R.id.male_radio:
+						mLogin.setGender("m");
+						break;
+					case R.id.female_radio:
+						mLogin.setGender("f");
+						break;
+				}
 				Log.d("gender", "gender: " + mLogin.getGender());
 				changeAccessibility();
 			}
