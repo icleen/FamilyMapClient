@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 public class LoginFragment extends android.support.v4.app.Fragment {
@@ -25,6 +26,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 
 	private RadioButton mMale;
 	private RadioButton mFemale;
+	private RadioGroup mRadioGroup;
 
 	private Button mSignIn;
 	private Button mRegister;
@@ -35,8 +37,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		mLogin = new Login();
-		mSignIn.setActivated(false);
-		mRegister.setActivated(false);
+//		mSignIn.setActivated(false);
+//		mRegister.setActivated(false);
 	}
 
 	@Override
@@ -167,12 +169,15 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			}
 		});
 
+		mRadioGroup = (RadioGroup) v.findViewById(R.id.radio_group);
+
 		mMale = (RadioButton) v.findViewById(R.id.male_radio);
 		mMale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				mLogin.setMale(isChecked);
-				Log.d("gender", "isMale: " + mLogin.isMale());
+				mLogin.setGender("m");
+				Log.d("gender", "gender: " + mLogin.getGender());
+				changeAccessibility();
 			}
 		});
 
@@ -180,8 +185,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 		mFemale.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				mLogin.setMale(!isChecked);
-				Log.d("gender", "isMale: " + mLogin.isMale());
+				mLogin.setGender("f");
+				Log.d("gender", "gender: " + mLogin.getGender());
 				changeAccessibility();
 			}
 		});
@@ -191,6 +196,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			@Override
 			public void onClick(View view) {
 				Toast.makeText(view.getContext(), "Signed In", Toast.LENGTH_SHORT).show();
+				Log.d("signIn", "onClick: " + mLogin.toString());
 			}
 		});
 
@@ -199,17 +205,21 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			@Override
 			public void onClick(View v) {
 				Toast.makeText(v.getContext(), "Registered", Toast.LENGTH_SHORT).show();
+				Log.d("register", "onClick: " + mLogin.toString());
 			}
 		});
+
+		mSignIn.setEnabled(false);
+		mRegister.setEnabled(false);
 
 		return v;
 	}
 
 	private void changeAccessibility() {
 		if(mLogin.isLoginReady()) {
-			mSignIn.setActivated(true);
+			mSignIn.setEnabled(true);
 		}if(mLogin.isRegisterReady()) {
-			mRegister.setActivated(true);
+			mRegister.setEnabled(true);
 		}
 	}
 
