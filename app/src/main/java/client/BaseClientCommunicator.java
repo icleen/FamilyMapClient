@@ -1,13 +1,13 @@
 package client;
 
+import app.libs.com.google.gson.Gson;
+
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-
-import com.google.gson.*;
 
 public class BaseClientCommunicator {
 	public static BaseClientCommunicator SINGLETON;
