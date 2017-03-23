@@ -1,5 +1,6 @@
 package client;
 
+import cs240.iainlee.familymapclient.Login;
 import models.Event;
 import models.Events;
 import models.LoginRequest;
@@ -10,6 +11,26 @@ import models.Person;
 import models.User;
 
 public class ServerProxy {
+	
+	public void addServerInfo(Login info) {
+		ClientCommunicator.SINGLETON.setServerHost(info.getServerHost());
+		ClientCommunicator.SINGLETON.setServerPort(info.getServerPort());
+	}
+	
+	/**
+	 * creates a new user and generates 4 generations of ancestors for the user
+	 * @param info an object of Login
+	 */
+	public LoginResponse registerUser(Login info) {
+		ClientCommunicator.SINGLETON.setServerHost(info.getServerHost());
+		ClientCommunicator.SINGLETON.setServerPort(info.getServerPort());
+		User user = new User(info.getUsername(), info.getPassword(), info.getEmail(), info.getFirstName(), info.getLastName(), info.getGender(), null, null);
+		LoginResponse response = ClientCommunicator.SINGLETON.register(user);
+		if(response.getErrorMessage() != null) {
+//			System.out.println(response.getErrorMessage());
+		}
+		return response;
+	}
 	
 	/**
 	 * creates a new user and generates 4 generations of ancestors for the user
@@ -22,7 +43,24 @@ public class ServerProxy {
 		}
 		return response;
 	}
-
+	
+	/**
+	 * logs a user in and makes the server's user object equal to the user specified
+	 * @param info an object of Login
+	 */
+	public LoginResponse userLogin(Login info) {
+		ClientCommunicator.setServerHost(info.getServerHost());
+		ClientCommunicator.setServerPort(info.getServerPort());
+		LoginRequest lr = new LoginRequest();
+		lr.setUserName(info.getUsername());
+		lr.setPassword(info.getPassword());
+		LoginResponse response = ClientCommunicator.SINGLETON.login(lr);
+		if(response.getErrorMessage() != null) {
+//			System.out.println(response.getErrorMessage());
+		}
+		return response;
+	}
+	
 	/**
 	 * logs a user in and makes the server's user object equal to the user specified
 	 * @param user an object of User

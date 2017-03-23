@@ -16,6 +16,11 @@ import android.widget.Toast;
 
 import java.io.IOException;
 
+import client.ServerProxy;
+import models.Event;
+import models.LoginResponse;
+import models.Person;
+
 public class LoginFragment extends android.support.v4.app.Fragment {
 
 	private EditText mServerHost;
@@ -34,10 +39,12 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 	private Button mRegister;
 
 	private Login mLogin;
+	private LoginResponse mResponse;
+	
+	private Person[] mPersons;
+	private Event[] mEvents;
 	
 	private static final String TAG = "LoginFragment";
-//	private static String URL_PREFIX = "http://" + SERVER_HOST + ":" + ServerCommunicator.getServerPortNumber();
-	private static String URL_PREFIX = "http://";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -199,8 +206,14 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 		mSignIn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				Toast.makeText(view.getContext(), "Signed In", Toast.LENGTH_SHORT).show();
-				Log.d("signIn", "onClick: " + mLogin.toString());
+				new loginServer().execute();
+				if(mResponse != null || mResponse.getErrorMessage() != null) {
+					Toast.makeText(view.getContext(), "Failed", Toast.LENGTH_SHORT).show();
+					Log.d("login", "onClick: " + mResponse.toString());
+				}else {
+					Toast.makeText(view.getContext(), "Login", Toast.LENGTH_SHORT).show();
+					Log.d("login", "onClick: " + mResponse.toString());
+				}
 			}
 		});
 
@@ -208,8 +221,15 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 		mRegister.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Toast.makeText(v.getContext(), "Registered", Toast.LENGTH_SHORT).show();
-				Log.d("register", "onClick: " + mLogin.toString());
+				new registerInServer().execute();
+				if(mResponse != null || mResponse.getErrorMessage() != null) {
+					Toast.makeText(v.getContext(), "Failed", Toast.LENGTH_SHORT).show();
+					Log.d("register", "onClick: " + mResponse.toString());
+				}else {
+					Toast.makeText(v.getContext(), "Registered", Toast.LENGTH_SHORT).show();
+					Log.d("register", "onClick: " + mResponse.toString());
+				}
+				
 			}
 		});
 
@@ -227,18 +247,43 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 		}
 	}
 	
-	private class fetchLoginInfo extends AsyncTask<Void, Void, Void> {
+	private class registerInServer extends AsyncTask<Void, Void, LoginResponse> {
+		
+		@Override
+		protected LoginResponse doInBackground(Void... params) {
+			LoginResponse response = new ServerProxy().registerUser(mLogin);
+			return response;
+		}
+		
+		@Override
+		protected void onPostExecute(LoginResponse r) {
+			mResponse = r;
+		}
+	}
+	
+	private class loginServer extends AsyncTask<Void, Void, LoginResponse> {
+		
+		@Override
+		protected LoginResponse doInBackground(Void... params) {
+			LoginResponse response = new ServerProxy().userLogin(mLogin);
+			return response;
+		}
+		
+		@Override
+		protected void onPostExecute(LoginResponse r) {
+			mResponse = r;
+		}
+	}
+	
+	private class fetchUserInfo extends AsyncTask<Void, Void, Void> {
 		
 		@Override
 		protected Void doInBackground(Void... params) {
-//			try {
-//				String url = URL_PREFIX +  mLogin.getServerHost() + ":" + mLogin.getServerPort();
-//				String result = null; // get the info back from the server
-//				Log.i(TAG, "Fetched url: " + result);
-//			} catch (IOException e) {
-//				Log.e(TAG, "Failed to fetch URL: ", e);
-//			}
+			ServerProxy server = new ServerProxy();
+			mPersons = server.getPeople();
+			mEvents = server.getEvents();
 			return null;
 		}
+		
 	}
 }
