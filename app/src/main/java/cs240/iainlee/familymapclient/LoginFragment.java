@@ -1,6 +1,8 @@
 package cs240.iainlee.familymapclient;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -8,11 +10,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import java.io.IOException;
+import java.security.Policy;
 
 public class LoginFragment extends android.support.v4.app.Fragment {
 
@@ -32,6 +36,10 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 	private Button mRegister;
 
 	private Login mLogin;
+	
+	private static final String TAG = "LoginFragment";
+//	private static String URL_PREFIX = "http://" + SERVER_HOST + ":" + ServerCommunicator.getServerPortNumber();
+	private static String URL_PREFIX = "http://";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -219,6 +227,22 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 		}if(mLogin.isRegisterReady()) {
 			mRegister.setEnabled(true);
 		}
+	}
+	
+	private class fetchLoginInfo extends AsyncTask<Void, Void, Void> {
+		
+		@Override
+		protected Void doInBackground(Void... params) {
+			try {
+				String url = URL_PREFIX +  mLogin.getServerHost() + ":" + mLogin.getServerPort();
+				String result = null; // get the info back from the server
+				Log.i(TAG, "Fetched url: " + result);
+			} catch (IOException e) {
+				Log.e(TAG, "Failed to fetch URL: ", e);
+			}
+			return null;
+		}
+		
 	}
 
 }
