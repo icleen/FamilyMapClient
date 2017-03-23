@@ -11,24 +11,24 @@ public class Login {
     private String mFirstName;
     private String mLastName;
     private String mEmail;
-    private boolean mIsMale;
+    private String mGender;
 
     private String mServerHost;
     private String mServerPort;
+	
+	public boolean isLoginReady() {
+		if(mUsername != null && mPassword != null && mServerHost != null && mServerPort != null) {
+			return true;
+		}
+		return false;
+	}
 
-    public boolean isLoginReady() {
-        if(mUsername != null && mPassword != null && mServerHost != null && mServerPort != null) {
-            return true;
-        }
-        return false;
-    }
-
-    public boolean isRegisterReady() {
-        if(mUsername != null && mPassword != null && mServerHost != null && mServerPort != null && mFirstName != null && mLastName != null && mEmail != null) {
-            return true;
-        }
-        return false;
-    }
+	public boolean isRegisterReady() {
+		if(mUsername != null && mPassword != null && mServerHost != null && mServerPort != null && mFirstName != null && mLastName != null && mEmail != null && mGender != null) {
+			return true;
+		}
+		return false;
+	}
 
     public String getUsername() {
         return mUsername;
@@ -70,15 +70,15 @@ public class Login {
         mEmail = email;
     }
 
-    public boolean isMale() {
-        return mIsMale;
-    }
+	public String getGender() {
+		return mGender;
+	}
 
-    public void setMale(boolean isMale) {
-        mIsMale = isMale;
-    }
+	public void setGender(String gender) {
+		mGender = gender;
+	}
 
-    public String getServerHost() {
+	public String getServerHost() {
         return mServerHost;
     }
 
@@ -93,4 +93,18 @@ public class Login {
     public void setServerPort(String serverPort) {
         mServerPort = serverPort;
     }
+
+	@Override
+	public String toString() {
+		return "Login{" +
+				"mUsername='" + mUsername + '\'' +
+				", mPassword='" + mPassword + '\'' +
+				", mFirstName='" + mFirstName + '\'' +
+				", mLastName='" + mLastName + '\'' +
+				", mEmail='" + mEmail + '\'' +
+				", mGender='" + mGender + '\'' +
+				", mServerHost='" + mServerHost + '\'' +
+				", mServerPort='" + mServerPort + '\'' +
+				'}';
+	}
 }
