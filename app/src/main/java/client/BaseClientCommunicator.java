@@ -1,6 +1,6 @@
 package client;
 
-import app.libs.com.google.gson.Gson;
+import com.google.gson.Gson;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,17 +9,19 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+
 public class BaseClientCommunicator {
 	public static BaseClientCommunicator SINGLETON;
 
 	protected static String SERVER_HOST = "localhost";
 	protected static String SERVER_PORT = "3740";
-	protected static String URL_PREFIX = "http://" + SERVER_HOST + ":" + SERVER_PORT;
+	protected static String URL_PREFIX = "http://";
 	protected static final String HTTP_POST = "POST";
 	protected static final String HTTP_GET = "GET";
 
 	public static final String AUTHORIZATION_KEY = "Authorization";
 	protected String authCode;
+	
 
 	protected Gson gson = new Gson();
 
@@ -97,7 +99,7 @@ public class BaseClientCommunicator {
 	{
 		HttpURLConnection result = null;
 		try {
-			URL url = new URL(URL_PREFIX + context);
+			URL url = new URL(URL_PREFIX + SERVER_HOST + ":" + SERVER_PORT + context);
 			result = (HttpURLConnection) url.openConnection();
 			result.setRequestMethod(action);
 			result.setDoOutput(sendingToServer);

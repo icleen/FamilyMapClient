@@ -1,5 +1,7 @@
 package client;
 
+import android.util.Log;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -16,6 +18,8 @@ import models.Person;
 import models.User;
 
 public class ClientCommunicator extends BaseClientCommunicator {
+	
+	private final String TAG = "ClientCommunicator";
 
 	public static final String REGISTER_DESIGNATOR = "/user/register";
 	public static final String LOGIN_DESIGNATOR = "/user/login";
@@ -39,12 +43,14 @@ public class ClientCommunicator extends BaseClientCommunicator {
 	public LoginResponse register(User toBeSent) {
 		Object response = null;
 		HttpURLConnection connection = openConnection(REGISTER_DESIGNATOR, HTTP_POST, authCode, true);
+		Log.d(TAG, "Connection made");
 		if(connection == null) {
 			return null;
 		}
 		sendToServer(connection, toBeSent);
 		response = getResponse(connection, LoginResponse.class);
 		LoginResponse temp = (LoginResponse) response;
+		Log.d(TAG, temp.toString());
 		if(temp.getAuthCode() != null) {
 			this.authCode = temp.getAuthCode();
 		}

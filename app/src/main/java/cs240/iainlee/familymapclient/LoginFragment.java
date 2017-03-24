@@ -14,8 +14,6 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import java.io.IOException;
-
 import client.ServerProxy;
 import models.Event;
 import models.LoginResponse;
@@ -38,7 +36,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 	private Button mSignIn;
 	private Button mRegister;
 
-	private Login mLogin;
+	private LoginInfo mLoginInfo;
 	private LoginResponse mResponse;
 	
 	private Person[] mPersons;
@@ -49,7 +47,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		mLogin = new Login();
+		mLoginInfo = new LoginInfo();
 	}
 
 	@Override
@@ -64,8 +62,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mLogin.setUsername(s.toString());
-//				Log.d("username", "added the username: " + mLogin.getUsername());
+				mLoginInfo.setUsername(s.toString());
+//				Log.i("username", "added the username: " + mLoginInfo.getUsername());
 				changeAccessibility();
 			}
 
@@ -82,8 +80,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mLogin.setPassword(s.toString());
-//				Log.d("password", "added the password: " + mLogin.getPassword());
+				mLoginInfo.setPassword(s.toString());
+//				Log.d("password", "added the password: " + mLoginInfo.getPassword());
 				changeAccessibility();
 			}
 
@@ -100,7 +98,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mLogin.setFirstName(s.toString());
+				mLoginInfo.setFirstName(s.toString());
 				changeAccessibility();
 			}
 
@@ -117,7 +115,7 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mLogin.setLastName(s.toString());
+				mLoginInfo.setLastName(s.toString());
 				changeAccessibility();
 			}
 
@@ -134,8 +132,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mLogin.setEmail(s.toString());
-//				Log.d("email", "added the email: " + mLogin.getEmail());
+				mLoginInfo.setEmail(s.toString());
+//				Log.d("email", "added the email: " + mLoginInfo.getEmail());
 				changeAccessibility();
 			}
 
@@ -152,8 +150,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mLogin.setServerHost(s.toString());
-//				Log.d("server_host", "added the server host number " + mLogin.getServerHost());
+				mLoginInfo.setServerHost(s.toString());
+//				Log.d("server_host", "added the server host number " + mLoginInfo.getServerHost());
 				changeAccessibility();
 			}
 
@@ -170,8 +168,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before, int count) {
-				mLogin.setServerPort(s.toString());
-//				Log.d("server_port", "added the server port number " + mLogin.getServerPort());
+				mLoginInfo.setServerPort(s.toString());
+//				Log.d("server_port", "added the server port number " + mLoginInfo.getServerPort());
 				changeAccessibility();
 			}
 
@@ -191,13 +189,13 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 			public void onCheckedChanged(RadioGroup group, int checkedId) {
 				switch(checkedId) {
 					case R.id.male_radio:
-						mLogin.setGender("m");
+						mLoginInfo.setGender("m");
 						break;
 					case R.id.female_radio:
-						mLogin.setGender("f");
+						mLoginInfo.setGender("f");
 						break;
 				}
-				Log.d("gender", "gender: " + mLogin.getGender());
+//				Log.d("gender", "gender: " + mLoginInfo.getGender());
 				changeAccessibility();
 			}
 		});
@@ -206,14 +204,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 		mSignIn.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View view) {
-				new loginServer().execute();
-				if(mResponse != null || mResponse.getErrorMessage() != null) {
-					Toast.makeText(view.getContext(), "Failed", Toast.LENGTH_SHORT).show();
-					Log.d("login", "onClick: " + mResponse.toString());
-				}else {
-					Toast.makeText(view.getContext(), "Login", Toast.LENGTH_SHORT).show();
-					Log.d("login", "onClick: " + mResponse.toString());
-				}
+				Log.d(TAG, "Now loging in");
+				new loginServerTask().execute();
 			}
 		});
 
@@ -221,15 +213,8 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 		mRegister.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				new registerInServer().execute();
-				if(mResponse != null || mResponse.getErrorMessage() != null) {
-					Toast.makeText(v.getContext(), "Failed", Toast.LENGTH_SHORT).show();
-					Log.d("register", "onClick: " + mResponse.toString());
-				}else {
-					Toast.makeText(v.getContext(), "Registered", Toast.LENGTH_SHORT).show();
-					Log.d("register", "onClick: " + mResponse.toString());
-				}
-				
+				Log.d(TAG, "Now registering");
+				new registerInServerTask().execute();
 			}
 		});
 
@@ -240,50 +225,114 @@ public class LoginFragment extends android.support.v4.app.Fragment {
 	}
 
 	private void changeAccessibility() {
-		if(mLogin.isLoginReady()) {
+		if(mLoginInfo.isLoginReady()) {
 			mSignIn.setEnabled(true);
-		}if(mLogin.isRegisterReady()) {
+		}if(mLoginInfo.isRegisterReady()) {
 			mRegister.setEnabled(true);
 		}
 	}
 	
-	private class registerInServer extends AsyncTask<Void, Void, LoginResponse> {
+	private class registerInServerTask extends AsyncTask<Void, Void, LoginResponse> {
 		
 		@Override
 		protected LoginResponse doInBackground(Void... params) {
-			LoginResponse response = new ServerProxy().registerUser(mLogin);
+			LoginResponse response = new ServerProxy().registerUser(mLoginInfo);
 			return response;
 		}
 		
 		@Override
 		protected void onPostExecute(LoginResponse r) {
 			mResponse = r;
+			if(mResponse != null) {
+				Log.d(TAG, mResponse.toString());
+			}
+			if (mResponse.getErrorMessage() != null) {
+				Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
+			new fetchPersonsTask().execute();
+			new fetchEventsTask().execute();
+			
+			Toast.makeText(getActivity(), "Registered", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
-	private class loginServer extends AsyncTask<Void, Void, LoginResponse> {
+	private class loginServerTask extends AsyncTask<Void, Void, LoginResponse> {
 		
 		@Override
 		protected LoginResponse doInBackground(Void... params) {
-			LoginResponse response = new ServerProxy().userLogin(mLogin);
+			LoginResponse response = new ServerProxy().userLogin(mLoginInfo);
 			return response;
 		}
 		
 		@Override
 		protected void onPostExecute(LoginResponse r) {
 			mResponse = r;
+			if(mResponse != null) {
+				Log.d(TAG, mResponse.toString());
+			}
+			if (mResponse.getErrorMessage() != null) {
+				Toast.makeText(getActivity(), "Failed", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			
+			new fetchEventsTask().execute();
+			new fetchPersonsTask().execute();
+			
+//			Toast.makeText(getActivity(), "Logged In", Toast.LENGTH_SHORT).show();
 		}
 	}
 	
-	private class fetchUserInfo extends AsyncTask<Void, Void, Void> {
+	private class fetchEventsTask extends AsyncTask<Void, Void, Event[]> {
 		
 		@Override
-		protected Void doInBackground(Void... params) {
-			ServerProxy server = new ServerProxy();
-			mPersons = server.getPeople();
-			mEvents = server.getEvents();
-			return null;
+		protected Event[] doInBackground(Void... params) {
+			return new ServerProxy().getEvents();
 		}
 		
+		@Override
+		protected void onPostExecute(Event[] r) {
+			if(r != null) {
+				Log.d(TAG, "Got Events");
+			}
+			mEvents = r;
+//			Toast.makeText(getActivity(), mResponse.getUserName(), Toast.LENGTH_SHORT).show();
+		}
+		
+	}
+	
+	private class fetchPersonsTask extends AsyncTask<Void, Void, Person[]> {
+		
+		@Override
+		protected Person[] doInBackground(Void... params) {
+			return new ServerProxy().getPeople();
+		}
+		
+		@Override
+		protected void onPostExecute(Person[] r) {
+			if(r != null) {
+				Log.d(TAG, "Got People");
+			}
+			mPersons = r;
+			Person user = getUserPerson();
+			if (user == null) {
+				Log.e(TAG, "There was no person associated with the user!");
+				Toast.makeText(getActivity(), "No User Error", Toast.LENGTH_SHORT).show();
+				return;
+			}
+			Toast.makeText(getActivity(), user.getFirstName() + ", " + user.getLastName(), Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	private Person getUserPerson() {
+//		Log.i(TAG, mResponse.getPersonId());
+		for (int i = 0; i < mPersons.length; i++) {
+//			Log.i(TAG, mPersons[i].getId());
+			if( mPersons[i].getId().equals(mResponse.getPersonId()) ) {
+				return mPersons[i];
+			}
+		}
+		return null;
 	}
 }

@@ -1,6 +1,8 @@
 package client;
 
-import cs240.iainlee.familymapclient.Login;
+import android.util.Log;
+
+import cs240.iainlee.familymapclient.LoginInfo;
 import models.Event;
 import models.Events;
 import models.LoginRequest;
@@ -12,24 +14,28 @@ import models.User;
 
 public class ServerProxy {
 	
-	public void addServerInfo(Login info) {
+	private final String TAG = "ServerProxy";
+	
+	public void addServerInfo(LoginInfo info) {
 		ClientCommunicator.SINGLETON.setServerHost(info.getServerHost());
 		ClientCommunicator.SINGLETON.setServerPort(info.getServerPort());
 	}
 	
 	/**
 	 * creates a new user and generates 4 generations of ancestors for the user
-	 * @param info an object of Login
+	 * @param info an object of LoginInfo
 	 */
-	public LoginResponse registerUser(Login info) {
+	public LoginResponse registerUser(LoginInfo info) {
 		ClientCommunicator.SINGLETON.setServerHost(info.getServerHost());
 		ClientCommunicator.SINGLETON.setServerPort(info.getServerPort());
 		User user = new User(info.getUsername(), info.getPassword(), info.getEmail(), info.getFirstName(), info.getLastName(), info.getGender(), null, null);
 		LoginResponse response = ClientCommunicator.SINGLETON.register(user);
 		if(response.getErrorMessage() != null) {
-//			System.out.println(response.getErrorMessage());
+			Log.d(TAG, response.getErrorMessage());
 		}
+//		Log.d(TAG, "Got Info");
 		return response;
+//		return null;
 	}
 	
 	/**
@@ -46,9 +52,9 @@ public class ServerProxy {
 	
 	/**
 	 * logs a user in and makes the server's user object equal to the user specified
-	 * @param info an object of Login
+	 * @param info an object of LoginInfo
 	 */
-	public LoginResponse userLogin(Login info) {
+	public LoginResponse userLogin(LoginInfo info) {
 		ClientCommunicator.setServerHost(info.getServerHost());
 		ClientCommunicator.setServerPort(info.getServerPort());
 		LoginRequest lr = new LoginRequest();
@@ -56,9 +62,11 @@ public class ServerProxy {
 		lr.setPassword(info.getPassword());
 		LoginResponse response = ClientCommunicator.SINGLETON.login(lr);
 		if(response.getErrorMessage() != null) {
-//			System.out.println(response.getErrorMessage());
+			Log.d(TAG, response.getErrorMessage());
 		}
+//		Log.d(TAG, "Got Info");
 		return response;
+//		return null;
 	}
 	
 	/**

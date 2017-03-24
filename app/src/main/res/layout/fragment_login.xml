@@ -41,7 +41,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_server_host"
-                        android:inputType="text"/>
+                        android:inputType="text"
+                        android:text="10.24.69.170"/>
 
                 </LinearLayout>
 
@@ -60,7 +61,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:hint="@string/prompt_server_port"
-                        android:inputType="number"/>
+                        android:inputType="number"
+                        android:text="3740"/>
 
                 </LinearLayout>
 

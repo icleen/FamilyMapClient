@@ -4,7 +4,7 @@ package cs240.iainlee.familymapclient;
  * Created by iain on 3/18/17.
  */
 
-public class Login {
+public class LoginInfo {
 
     private String mUsername;
     private String mPassword;
@@ -96,7 +96,7 @@ public class Login {
 
 	@Override
 	public String toString() {
-		return "Login{" +
+		return "LoginInfo{" +
 				"mUsername='" + mUsername + '\'' +
 				", mPassword='" + mPassword + '\'' +
 				", mFirstName='" + mFirstName + '\'' +
